@@ -1,6 +1,48 @@
-﻿@*
+﻿@model List<TouristAttraction>
+
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
-<h1>Ponto turístico</h1>
+<div class="container">
+    <div class="text-center bg-body-tertiary rounded-3">
+        <h1 class="text-body-emphasis">Jumbotron with icon</h1>
+        <p class="col-lg-8 mx-auto fs-5 text-muted">
+            This is a custom jumbotron featuring an SVG image at the top, some longer text that wraps early thanks to a responsive <code>.col-*</code> class, and a customized call to action.
+        </p>
+        <div class="d-inline-flex gap-2 mb-5">
+            <button class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
+                Call to action
+                <svg class="bi ms-2" width="24" height="24"><use xlink:href="#arrow-right-short" /></svg>
+            </button>
+            <button class="btn btn-outline-secondary btn-lg px-4 rounded-pill" type="button">
+                Secondary link
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+@*     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Christ_the_Redeemer_-_Cristo_Redentor.jpg/800px-Christ_the_Redeemer_-_Cristo_Redentor.jpg" alt="Cristo_Redentor" srcset="">
+*@    <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+            @foreach (var item in Model)
+            {
+                <div class="card-header py-3">
+                    <h4 class="my-0 fw-normal">@item.Name</h4>
+                </div>
+                <div class="card-body">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Christ_the_Redeemer_-_Cristo_Redentor.jpg/800px-Christ_the_Redeemer_-_Cristo_Redentor.jpg" alt="Cristo_Redentor" srcset="">
+                    <p class="card-text">@item.Description</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                        </div>
+                        <small class="text-body-secondary">9 mins</small>       
+                     </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
