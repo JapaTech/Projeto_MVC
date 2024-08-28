@@ -8,7 +8,7 @@ namespace EstudoMVC.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Content { get; set; }
+        public string? Content { get; set; }
         public DateTime CreationDate { get; set; } = DateTime.Now;
         public ExperienceType MainExperience { get; set; }
         public ExperienceType? SideExperience { get; set; } = null;
@@ -16,11 +16,11 @@ namespace EstudoMVC.Models
         
         [ForeignKey("TouristAttraction")]
         public int TouristAttractionId { get; set; }
-        public TouristAttraction TouristAttraction { get; set; }
+        public TouristAttraction TouristAttraction { get; set; } = null!;
 
         [ForeignKey("User")]
         public int UserId { get; set; }
-        public User User { get; set; }
+        public User User { get; set; } = null!;
 
         public Review() { }
 

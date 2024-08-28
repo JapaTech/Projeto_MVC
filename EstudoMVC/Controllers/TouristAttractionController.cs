@@ -18,5 +18,12 @@ namespace EstudoMVC.Controllers
             List<TouristAttraction> touristAttractions = _context.TouristAttractions.ToList();
             return View(touristAttractions);
         }
+
+        
+        public IActionResult Detail(int id)
+        {
+            TouristAttraction attraction = _context.TouristAttractions.FirstOrDefault(x => x.Id == id);
+            return View(attraction);
+        }
     }
 }
