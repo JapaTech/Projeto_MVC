@@ -1,10 +1,13 @@
 using EstudoMVC.DataContent;
+using EstudoMVC.Interfaces;
+using EstudoMVC.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ITouristAttractionService, TouristAttractionService>();
 
 builder.Services.AddDbContext<MVC_DbContext>(options =>
 {
@@ -13,7 +16,7 @@ builder.Services.AddDbContext<MVC_DbContext>(options =>
 
 var app = builder.Build();
 
-
+if (args.Length ==1 && args[0].ToLower() == "seeddata")
     Seed.SeedData(app);
 
 
