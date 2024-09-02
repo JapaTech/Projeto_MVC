@@ -9,7 +9,7 @@ namespace EstudoMVC.Models
         public string? Name { get; set; }
         public string? Description { get; set; }
         public string? Image {  get; set; }
-        public float ReviewsAvg { get; set; }
+        public float ReviewsAvg { get; set; } = 0;
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

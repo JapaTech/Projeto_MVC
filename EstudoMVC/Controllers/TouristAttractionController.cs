@@ -28,5 +28,21 @@ namespace EstudoMVC.Controllers
             TouristAttraction attraction = await _touristAttractionService.GetByIdAsync(id);
             return View(attraction);
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(TouristAttraction touristAttraction)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(touristAttraction);
+            }
+            _touristAttractionService.Add(touristAttraction);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
