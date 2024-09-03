@@ -1,3 +1,5 @@
+using Amazon;
+using Amazon.S3;
 using EstudoMVC.DataContent;
 using EstudoMVC.Interfaces;
 using EstudoMVC.Services;
@@ -8,6 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ITouristAttractionService, TouristAttractionService>();
+builder.Services.AddSingleton<IAmazonS3, AmazonS3Client>();
+builder.Services.AddSingleton<ITouristAttractionImageService, TouristAttractionImageService>();
+
+var awsOptions = builder.Configuration.GetAWSOptions();
+builder.Services.AddDefaultAWSOptions(awsOptions);
+builder.Services.AddAWSService<IAmazonS3>();
+
 
 builder.Services.AddDbContext<MVC_DbContext>(options =>
 {
