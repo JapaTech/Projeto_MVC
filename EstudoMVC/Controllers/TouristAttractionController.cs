@@ -1,6 +1,7 @@
 ﻿using EstudoMVC.DataContent;
 using EstudoMVC.Interfaces;
 using EstudoMVC.Models;
+using EstudoMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstudoMVC.Controllers
@@ -43,6 +44,51 @@ namespace EstudoMVC.Controllers
             }
             _touristAttractionService.Add(touristAttraction);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var attraction = await _touristAttractionService.GetByIdAsync(id);
+            if (attraction == null) return View("Error");
+            var attractionVM = new EditAttractionViewModel
+            {
+                Id = attraction.Id,
+                Name = attraction.Name,
+                Description = attraction.Description,
+                Image = attraction.Image,
+            };
+
+            return View (attractionVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditAttractionViewModel editAttractionVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Failed to edit club");
+                return View("Edit", editAttractionVM);
+            }
+
+            var currentAtrraction = await _touristAttractionService.GetByIdAsyncNoTracking(id);
+
+            if(currentAtrraction != null)
+            {
+                var newAttraction = new TouristAttraction
+                {
+                    Id = id,
+                    Name = editAttractionVM.Name,
+                    Description = editAttractionVM.Description,
+                    Image = editAttractionVM.Image,
+                    ReviewsAvg = editAttractionVM.ReviewsAvg,
+                };
+                _touristAttractionService.Update(newAttraction);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(editAttractionVM);
+            }
         }
     }
 }

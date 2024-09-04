@@ -6,6 +6,7 @@ namespace EstudoMVC.Interfaces
     {
         Task<IEnumerable<TouristAttraction>> GetAll();
         Task<TouristAttraction> GetByIdAsync(int id);
+        Task<TouristAttraction> GetByIdAsyncNoTracking(int id);
         Task<TouristAttraction> GetByName(string name);
         bool Add(TouristAttraction item);
         bool Delete(TouristAttraction item);

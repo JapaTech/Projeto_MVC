@@ -36,6 +36,11 @@ namespace EstudoMVC.Services
             return await _context.TouristAttractions.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<TouristAttraction> GetByIdAsyncNoTracking(int id)
+        {
+            return await _context.TouristAttractions.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<TouristAttraction> GetByName(string name)
         {
             return await _context.TouristAttractions.FirstOrDefaultAsync(x => x.Name == name);
