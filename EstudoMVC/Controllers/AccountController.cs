@@ -32,7 +32,7 @@ namespace EstudoMVC.Controllers
             if (!ModelState.IsValid)
                 return View(loginVM);
 
-            var user = await _userManager.FindByEmailAsync(loginVM.EmailAddres);
+            var user = await _userManager.FindByEmailAsync(loginVM.EmailAddress);
 
             if (user != null)
             {
@@ -57,9 +57,48 @@ namespace EstudoMVC.Controllers
 
         public IActionResult Register()
         {
-            var response = new LoginViewModel();
+            var response = new RegisterViewModel();
             return View(response);
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel registerVM)
+        {
+            if (!ModelState.IsValid)
+                return View(registerVM);
+
+            var user = await _userManager.FindByEmailAsync(registerVM.EmailAddress);
+
+            if (user != null)
+            {
+                TempData["Error"] = "This email address is already in use";
+                return View(registerVM);
+
+            }
+            var newUser = new User()
+            {
+                Email = registerVM.EmailAddress,
+                UserName = registerVM.Username,
+                Birth  = registerVM.Birth,
+                LockoutEnabled = false,
+                LockoutEnd = null
+            };
+
+            var newUserResponse = await _userManager.CreateAsync(newUser, registerVM.Password);
+
+            if (newUserResponse.Succeeded) 
+            { 
+                await _userManager.AddToRoleAsync(newUser, UserRoles.User);
+            }
+            return RedirectToAction("Index", "TouristAttraction");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "TouristAttraction");
         }
     }
 }

@@ -6,7 +6,7 @@ namespace EstudoMVC.ViewModels
     {
         [Display(Name = "Email Addres")]
         [Required(ErrorMessage = "Email required")]
-        public string EmailAddres { get; set; }
+        public string EmailAddress { get; set; }
         [Display(Name = "Password")]
         [Required]
         [DataType(DataType.Password)]
