@@ -1,9 +1,10 @@
 ﻿using EstudoMVC.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace EstudoMVC.DataContent
 {
-    public class MVC_DbContext : DbContext    
+    public class MVC_DbContext : IdentityDbContext<User>
     {
         public MVC_DbContext(DbContextOptions<MVC_DbContext> options) : base(options)
         {

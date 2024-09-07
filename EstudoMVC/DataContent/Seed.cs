@@ -1,4 +1,5 @@
 ﻿using EstudoMVC.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace EstudoMVC.DataContent
@@ -39,27 +40,15 @@ namespace EstudoMVC.DataContent
                     });
                     context.SaveChanges();
                 }
-                var alterarImagem = context.TouristAttractions.FirstOrDefault(t => t.Name == "Monte Fuji");
-                if (alterarImagem != null)
-                {
-                    alterarImagem.Image = "https://upload.wikimedia.org/wikipedia/commons/6/60/Mount_Fuji_from_Lake_Shoji_%2815443819010%29.jpg";
-                    context.TouristAttractions.Update(alterarImagem);
-                }
-                context.SaveChanges();
-                if (!context.Users.Any())
-                {
-                    context.Users.AddRange(new List<User>()
-                    {
-                        new User()
-                        {
-                            Name = "João Pedro",
-                            Email = "joaoPedro@gmail.com",
-                            Password = "Password123@",
-                            Birth = new DateTime(2000, 1, 1)
-                        }
-                    });
-                    context.SaveChanges();
-                }
+
+                //var alterarImagem = context.TouristAttractions.FirstOrDefault(t => t.Name == "Monte Fuji");
+                //if (alterarImagem != null)
+                //{
+                //    alterarImagem.Image = "https://upload.wikimedia.org/wikipedia/commons/6/60/Mount_Fuji_from_Lake_Shoji_%2815443819010%29.jpg";
+                //    context.TouristAttractions.Update(alterarImagem);
+                //}
+                //context.SaveChanges();
+          
                 if (!context.Reviews.Any())
                 {
                     context.Reviews.AddRange(new List<Review>()
@@ -72,10 +61,69 @@ namespace EstudoMVC.DataContent
                             SideExperience = null,
                             Score = Enum.Score.Satisfeito,
                             TouristAttractionId = context.TouristAttractions.First().Id,
-                            UserId = context.Users.First().Id,
+                            //UserId = context.Users.First().Id,
                         }
                     });
                     context.SaveChanges();
+                }
+            }
+        }
+
+        public static async Task SeedUrserAndRolesAsync(IApplicationBuilder applicationBuilder)
+        {
+            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+            {
+                //Roles
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                if(!await roleManager.RoleExistsAsync(UserRoles.Admin))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+                }
+                if(!await roleManager.RoleExistsAsync(UserRoles.User))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
+                }
+
+                //Users
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                string adminUserEmail = "jonathaniha.dev@gmail.com";
+
+                var adimUser = await userManager.FindByEmailAsync(adminUserEmail);
+
+                if (adimUser == null) 
+                {
+                    var newAdminUser = new User()
+                    {
+                        UserName = "JonathanIha",
+                        Email = adminUserEmail,
+                        EmailConfirmed = true,
+                        Birth = new DateTime(2000, 2, 13),
+                        LockoutEnabled = false,
+                        LockoutEnd = null
+                    };
+                    var result = await userManager.CreateAsync(newAdminUser, "Password123@");
+                    if(result.Succeeded)
+                        await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);
+                }
+
+                string appUserEmail = "user@etickets.com";
+                var appUser = await userManager.FindByEmailAsync(appUserEmail);
+
+                if (appUser == null) 
+                {
+                    var newAppUser = new User()
+                    {
+                        UserName = "app-user",
+                        Email = appUserEmail,
+                        EmailConfirmed = true,
+                        Birth = new DateTime(2004, 1, 10),
+                        LockoutEnabled = false,
+                        LockoutEnd = null
+                    };
+                    var result = await userManager.CreateAsync(newAppUser, "Password123@");
+                    if (result.Succeeded)
+                        await userManager.AddToRoleAsync(newAppUser, UserRoles.User);
                 }
             }
         }

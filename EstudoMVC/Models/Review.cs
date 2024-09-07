@@ -7,6 +7,7 @@ namespace EstudoMVC.Models
     public class Review
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string? Content { get; set; }
         public DateTime CreationDate { get; set; } = DateTime.Now;
@@ -19,16 +20,15 @@ namespace EstudoMVC.Models
         public TouristAttraction TouristAttraction { get; set; } = null!;
 
         [ForeignKey("User")]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; } = null!;
 
         public Review() { }
 
-        public Review(int id, string content, DateTime reviewDate, 
+        public Review(string content, DateTime reviewDate, 
             ExperienceType mainExperience, ExperienceType? sideExperience, Score score, 
-            int touristAttractionId, TouristAttraction touristAttraction, int userId, User user)
+            int touristAttractionId, TouristAttraction touristAttraction, string userId, User user)
         {
-            Id = id;
             Content = content;
             CreationDate = reviewDate;
             MainExperience = mainExperience;
