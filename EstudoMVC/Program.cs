@@ -16,11 +16,20 @@ builder.Services.AddDbContext<MVC_DbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<MVC_DbContext>();
+
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    // Configuração de lockout
+    options.Lockout.AllowedForNewUsers = false; // Desabilita lockout para novos usuários
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    // Outras configurações...
+}).AddEntityFrameworkStores<MVC_DbContext>(); ;
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
 
 var app = builder.Build();
 
@@ -43,7 +52,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

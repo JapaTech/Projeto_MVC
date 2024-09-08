@@ -88,7 +88,8 @@ namespace EstudoMVC.Controllers
             var newUserResponse = await _userManager.CreateAsync(newUser, registerVM.Password);
 
             if (newUserResponse.Succeeded) 
-            { 
+            {
+                await _userManager.UpdateAsync(newUser);
                 await _userManager.AddToRoleAsync(newUser, UserRoles.User);
             }
             return RedirectToAction("Index", "TouristAttraction");

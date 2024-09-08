@@ -90,5 +90,27 @@ namespace EstudoMVC.Controllers
                 return View(editAttractionVM);
             }
         }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var touristAttraction = await _touristAttractionService.GetByIdAsync(id);
+            if (touristAttraction == null) 
+            {
+                return View("Error");
+            }
+            return View(touristAttraction);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteTouristAttraction(int id)
+        {
+            var touristAttraction = await _touristAttractionService.GetByIdAsync(id);
+            if (touristAttraction == null)
+            {
+                return View("Error");
+            }
+            _touristAttractionService.Delete(touristAttraction);
+            return RedirectToAction("Index");
+        }
     }
 }
