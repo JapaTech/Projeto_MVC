@@ -10,16 +10,6 @@ namespace EstudoMVC.Models
 
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
 
-        public void AddReview(Review review)
-        {
-            Reviews.Add(review);
-        }
-
-        public void UpdateReview(Review review, string newText) 
-        { 
-            review.Content = newText;
-            review.CreationDate = DateTime.Now;
-        }
     }
 }
     

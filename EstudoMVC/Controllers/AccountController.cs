@@ -92,14 +92,14 @@ namespace EstudoMVC.Controllers
                 await _userManager.UpdateAsync(newUser);
                 await _userManager.AddToRoleAsync(newUser, UserRoles.User);
             }
-            return RedirectToAction("Index", "TouristAttraction");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "TouristAttraction");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

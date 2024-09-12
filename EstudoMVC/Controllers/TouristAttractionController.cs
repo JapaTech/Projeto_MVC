@@ -3,6 +3,7 @@ using EstudoMVC.Interfaces;
 using EstudoMVC.Models;
 using EstudoMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EstudoMVC.Controllers
 {
@@ -26,8 +27,15 @@ namespace EstudoMVC.Controllers
         
         public async Task<IActionResult> Detail(int id)
         {
-            TouristAttraction attraction = await _touristAttractionService.GetByIdAsync(id);
-            return View(attraction);
+            TouristAttraction attraction = await _context.TouristAttractions.Include(r => r.Reviews).FirstOrDefaultAsync(t => t.Id == id);
+            TouristAttractionReviewViewModel touristAttractionReviewVM = new TouristAttractionReviewViewModel
+            {
+                Attraction = attraction,
+                //TouristAttractionId = attraction.Id,
+                Reviews = attraction.Reviews,
+                Review = new ReviewViewModel()
+            };
+            return View(touristAttractionReviewVM);
         }
 
         public IActionResult Create()

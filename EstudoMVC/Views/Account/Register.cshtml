@@ -5,10 +5,13 @@
 *@
 @{
     ViewData["Title"] = "Sign Up";
+    var minDate = DateTime.Now.AddYears(-150).ToString("yyyy-MM-dd");
+    var maxDate = DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd");
+    var today = DateTime.Now.ToString("yyyy-MM-dd");
 }
 
 <div class="row">
-    <div class="col-md6 offset-3">
+    <div class="col-md-6 offset-3">
         @if (TempData["Error"] != null)
         {
             <div class="col-md-12 alert alert-danger">
@@ -43,7 +46,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Birth" class="control-label">Data Nascimento</label>
-                        <input asp-for="Birth" type="date" class="form-control" />
+                        <input asp-for="Birth" type="date" min="@minDate" max="@maxDate" value="@maxDate" class="form-control" />
                         <span asp-validation-for="Birth" class="text-danger"></span>
                     </div>
                     <div class="form-group">
