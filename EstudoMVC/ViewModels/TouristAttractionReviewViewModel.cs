@@ -10,5 +10,7 @@ namespace EstudoMVC.ViewModels
 
         public ReviewViewModel Review { get; set;}
         public ICollection <Review> Reviews { get; set;} = new List<Review>();
+
+        public float ReviesAvg;
     }
 }

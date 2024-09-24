@@ -28,7 +28,7 @@ namespace EstudoMVC.Services
 
         public async Task<IEnumerable<TouristAttraction>> GetAll()
         {
-            return await _context.TouristAttractions.ToListAsync();
+            return await _context.TouristAttractions.Include(r => r.Reviews).ToListAsync();
         }
 
         public async Task<TouristAttraction> GetByIdAsync(int id)

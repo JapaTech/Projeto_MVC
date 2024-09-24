@@ -1,4 +1,5 @@
-﻿@model List<TouristAttraction>
+﻿@using EstudoMVC.ViewModels;
+@model List<AttractionViewModel>
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -43,7 +44,7 @@
                                 
                                 
                             </div>
-                            <small class="text-body-secondary">9 mins</small>       
+                            <small class="text-body-secondary text-success border border-success rounded p-1">@item.ScoreAvg()</small>
                          </div>
                     </div>
                 </div>

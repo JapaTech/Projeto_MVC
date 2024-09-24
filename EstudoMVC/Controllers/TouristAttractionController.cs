@@ -1,4 +1,5 @@
 ﻿using EstudoMVC.DataContent;
+using EstudoMVC.DataContent.Enum;
 using EstudoMVC.Interfaces;
 using EstudoMVC.Models;
 using EstudoMVC.ViewModels;
@@ -21,19 +22,50 @@ namespace EstudoMVC.Controllers
         public async Task<IActionResult> Index()
         {
             IEnumerable<TouristAttraction> touristAttractions = await _touristAttractionService.GetAll();
-            return View(touristAttractions);
+
+
+            var viewModel = touristAttractions.Select(attraction => new AttractionViewModel
+            {
+                Id = attraction.Id,
+                Name = attraction.Name,
+                Description = attraction.Description,
+                Image = attraction.Image,
+                ReviewsAvg = attraction.Reviews.Any() ? attraction.Reviews.Average(r => (float)r.Score) : 0
+            }).ToList();
+
+            return View(viewModel);
         }
 
         
         public async Task<IActionResult> Detail(int id)
         {
-            TouristAttraction attraction = await _context.TouristAttractions.Include(r => r.Reviews).FirstOrDefaultAsync(t => t.Id == id);
+            TouristAttraction attraction = await _context.TouristAttractions.
+                Include(r => r.Reviews). 
+                FirstOrDefaultAsync(t => t.Id == id);
+
+            if (attraction != null && attraction.Reviews != null)
+            {
+                var userIds = attraction.Reviews.Select(r => r.UserId).Distinct().ToList();
+                var users = await _context.Users.Where(u => userIds.Contains(u.Id)).ToDictionaryAsync(u => u.Id);
+
+                foreach (var review in attraction.Reviews)
+                {
+                    if (review.UserId != null && users.TryGetValue(review.UserId, out var user))
+                    {
+                        review.User = user;
+                    }
+                }
+            }
+
+            float avgScore = attraction.Reviews.Any() ? attraction.Reviews.Average(r => (float)r.Score) : 0;
+
             TouristAttractionReviewViewModel touristAttractionReviewVM = new TouristAttractionReviewViewModel
             {
                 Attraction = attraction,
                 //TouristAttractionId = attraction.Id,
-                Reviews = attraction.Reviews,
-                Review = new ReviewViewModel()
+                Reviews = attraction.Reviews.OrderByDescending(r => r.CreationDate).ToList(),
+                Review = new ReviewViewModel(),
+                ReviesAvg = avgScore
             };
             return View(touristAttractionReviewVM);
         }
