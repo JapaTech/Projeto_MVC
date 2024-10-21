@@ -31,6 +31,11 @@ namespace EstudoMVC.Services
             return await _context.Reviews.ToListAsync();
         }
 
+        public async Task<IEnumerable<Review>> GetAllById(string id)
+        {
+            return await _context.Reviews.Where(r => r.UserId == id).Include(r => r.User).Include(r=>r.TouristAttraction).ToListAsync();
+        }
+
         public async Task<Review> GetByIdAsync(int id)
         {
             return await _context.Reviews.FirstOrDefaultAsync(x => x.Id == id) ;

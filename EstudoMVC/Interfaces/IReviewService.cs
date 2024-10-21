@@ -5,6 +5,7 @@ namespace EstudoMVC.Interfaces
     public interface IReviewService
     {
         Task<IEnumerable<Review>> GetAll();
+        Task<IEnumerable<Review>> GetAllById(string id);
         Task<Review> GetByIdAsync(int id);
         Task<Review> GetByIdAsyncNoTracking(int id);
         bool Add(Review item);

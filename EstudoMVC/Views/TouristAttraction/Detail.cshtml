@@ -1,6 +1,7 @@
 ﻿@using EstudoMVC.ViewModels;
 @using EstudoMVC.DataContent.Enum;
 @using EstudoMVC.Services;
+@using System.Security.Claims;
 @model TouristAttractionReviewViewModel;
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -43,9 +44,12 @@
                 @foreach (var analise in Model.Reviews)
                 {
                     <div class="rounded border border-secondary mb-3 p-4"> 
-                        
+
                         <div class="d-flex py-1 align-content-center">
-                            <h5 class="h4">@analise.User.UserName</h5>
+                                <form asp-controller="Dashboard" asp-action="Index" method="post">
+                                    <input type="hidden" name="id" value="@analise.User.Id"/>
+                                    <button type="submit" class="h4">@analise.User.UserName</button>
+                                </form>
                             <span class="h6 px-5">@analise.CreationDate</span>
                         </div>
                         
@@ -53,8 +57,8 @@
                             <p class="p-4">@analise.Content</p>
                         </div>
                         <div class="card">
-                            <div class="card-header">
-                                Experiências do usuário
+                            <div class="card-header bg-info text-white">
+                                <span>@analise.Score</span>
                             </div>
                             <div class="card-body">
                                 <div class="d-flex align-items-center gap-2">
@@ -67,9 +71,6 @@
                                     }
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <span>@analise.Score</span>
-                            </div> 
                         </div>
                     </div>
                 }

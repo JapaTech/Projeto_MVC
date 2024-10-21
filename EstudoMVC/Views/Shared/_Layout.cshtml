@@ -22,7 +22,9 @@
                             @if(User.Identity.IsAuthenticated)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index"
+                                    asp-route-id="@null">
+                                        Dashboard</a>
                                 </li>
                                 <li>
                                     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
