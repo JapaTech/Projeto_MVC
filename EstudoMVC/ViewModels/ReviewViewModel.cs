@@ -7,6 +7,8 @@ namespace EstudoMVC.ViewModels
 {
     public class ReviewViewModel
     {
+        public int Id { get; set; }
+
         [Required]
         public string Content { get; set; }
         

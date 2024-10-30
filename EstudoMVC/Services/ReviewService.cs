@@ -1,6 +1,7 @@
 ﻿using EstudoMVC.DataContent;
 using EstudoMVC.Interfaces;
 using EstudoMVC.Models;
+using EstudoMVC.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace EstudoMVC.Services
@@ -56,6 +57,20 @@ namespace EstudoMVC.Services
         {
             _context.Update(item);
             return Save();
+        }
+
+        public async Task<bool> UpdateReviewAsync(int id, ReviewViewModel reviewVM)
+        {
+            var review = await _context.Reviews.FindAsync(id);
+            if (review == null) return false;
+
+            review.Content = reviewVM.Content;
+            review.MainExperience = reviewVM.MainExperience;
+            review.SideExperience = reviewVM.SideExperience;
+            review.Score = reviewVM.Score;
+
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

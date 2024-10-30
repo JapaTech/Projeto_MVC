@@ -1,6 +1,7 @@
 ﻿using EstudoMVC.DataContent;
 using EstudoMVC.Interfaces;
 using EstudoMVC.Models;
+using EstudoMVC.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -49,6 +50,86 @@ namespace EstudoMVC.Controllers
                 Console.WriteLine("reviews == null");
             }
             return View(reviews); // Passando as reviews para a View, se necessário
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            Console.WriteLine("review id " + id);
+
+            var review = await _reviewService.GetByIdAsync(id);
+
+            if(review  == null)
+            {
+                return View("Error");
+            }
+
+            var reviewVM = new ReviewViewModel
+            {
+                Id = review.Id,
+                Content = review.Content,
+                CreationDate = review.CreationDate,
+                MainExperience = review.MainExperience,
+                SideExperience = review.SideExperience,
+                Score = review.Score,
+            };
+
+            return View(reviewVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, ReviewViewModel reviewViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Failed to edit club");
+                return View("Edit", reviewViewModel);
+            }
+
+            var currentReview = await _reviewService.GetByIdAsyncNoTracking(id);
+
+            if (currentReview != null) 
+            {
+
+                var success = await _reviewService.UpdateReviewAsync(id, reviewViewModel);
+                
+                if (success)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(reviewViewModel);
+                }
+            }
+            else
+            {
+                return View(reviewViewModel);
+
+            }
+
+
+        }
+        
+        public async Task<IActionResult> Delete(int id)
+        {
+            var review = await _reviewService.GetByIdAsync(id);
+            if (review == null) 
+            {
+                return View("Error");
+            }
+            return View(review);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeteleReview(int id)
+        {
+            var review = await _reviewService.GetByIdAsync(id);
+            if (review == null)
+            {
+                return View("Error");
+            }
+            _reviewService.Delete(review);
+            return RedirectToAction("Index");
         }
     }
 }
