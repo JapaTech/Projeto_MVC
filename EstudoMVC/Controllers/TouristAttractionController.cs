@@ -142,7 +142,7 @@ namespace EstudoMVC.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteTouristAttraction(int id)
+        public async Task<IActionResult> DeleteReview(int id)
         {
             var touristAttraction = await _touristAttractionService.GetByIdAsync(id);
             if (touristAttraction == null)

@@ -117,7 +117,18 @@ namespace EstudoMVC.Controllers
             {
                 return View("Error");
             }
-            return View(review);
+
+            var reviewModel = new ReviewViewModel
+            {
+                Id = review.Id,
+                Content = review.Content,
+                CreationDate = review.CreationDate,
+                MainExperience = review.MainExperience,
+                SideExperience = review.SideExperience,
+                Score = review.Score
+            };
+
+            return View(reviewModel);
         }
 
         [HttpPost, ActionName("Delete")]
