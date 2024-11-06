@@ -13,12 +13,15 @@ namespace EstudoMVC.Controllers
         private readonly UserManager<User> _userManager;
         private readonly MVC_DbContext _context;
         private readonly IReviewService _reviewService;
+        private readonly IDashboardService _dashboardService;
 
-        public DashboardController( UserManager<User> userManager, MVC_DbContext context, IReviewService reviewService)
+        public DashboardController( UserManager<User> userManager, MVC_DbContext context, IReviewService reviewService,
+            IDashboardService dashboardService)
         {
             _userManager = userManager;
             _context = context;
             _reviewService = reviewService;
+            _dashboardService = dashboardService;            
         }
 
         public async Task<IActionResult> Index()
@@ -141,6 +144,19 @@ namespace EstudoMVC.Controllers
             }
             _reviewService.Delete(review);
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> EditUserProfile()
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+
+            if (curUser == null)
+            {
+                return View("Error");
+            }
+
+
+            return View();
         }
     }
 }
